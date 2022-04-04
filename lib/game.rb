@@ -9,12 +9,12 @@ class Game
   include WordChecker
   include Display
 
-  attr_reader :round, :solution, :misses, :hits
+  attr_reader :round, :solution, :misses, :hits, :save_game, :game_over
+  alias save_game? save_game
+  alias game_over? game_over
 
   # Ask whether to start new game or load savestate on initialization, then start game
   def initialize(round: 0, solution: nil, misses: [], hits: [])
-    # save_name = get_save_name
-    # @path = "./saves/#{save_name}.txt"
     @round = round
     solution || @solution = select_word
     @misses = misses
@@ -36,10 +36,12 @@ class Game
     })
   end
 
-  def save_game
-    File.open(@path, 'w') do |file|
-      JSON.dump(self, file)
-    end
+  # Play out one round of hangman
+  def play_round
+    @round += 1
+    display_hidden_word
+    puts "Round #{@round}: "
+    user_action
   end
 
   private
@@ -48,11 +50,20 @@ class Game
   def play_game
   end
 
-  # Play out one round of hangman
-  def play_round
+
+  def user_action
+    case user_action_choice
+    when '1'
+      guess_letter
+    when '2'
+      guess_word
+    when '3'
+      @save_game = true
+    end
   end
 
-  def select_saves
+  def guess_letter
+    check_letter(ask_for_letter)
   end
 
   def select_word
@@ -64,9 +75,10 @@ class Game
 end
 
 test = Game.new
-p test
-# test.save_game
-# test2 = File.open('./saves/test.txt', 'r') do |file|
-#   JSON.parse(file.gets, create_additions: true)
-# end
-# p test2
+#test.check_letter('e')
+#p test.hits
+#p test.misses
+
+
+# Code to load a game object from save file
+# test2 = JSON.parse(File.read('./saves/FILENAME'))

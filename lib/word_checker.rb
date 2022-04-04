@@ -13,4 +13,8 @@ module WordChecker
     end
     @solution_hidden
   end
+
+  def correct_word?(guess)
+    @solution.downcase == guess.downcase
+  end
 end
