@@ -16,10 +16,11 @@ class Game
   # Ask whether to start new game or load savestate on initialization, then start game
   def initialize(round: 0, solution: nil, misses: [], hits: [])
     @round = round
-    solution || @solution = select_word
+    @solution = solution
+    @solution = select_word if @solution.nil?
     @misses = misses
     @hits = hits
-    set_solution_variables
+    play_game
   end
 
   def self.json_create(gamestate)
@@ -39,31 +40,43 @@ class Game
   # Play out one round of hangman
   def play_round
     @round += 1
-    display_hidden_word
     puts "Round #{@round}: "
+    display_hidden_word
+    puts "Hits: #{@hits.join(' ')}"
+    puts "Misses: #{@misses.join(' ')}"
     user_action
+  end
+
+    # Play rounds until save is requested or game ends
+  def play_game
+    set_solution_variables
+    puts @solution
+    @hits.each { |letter| check_letter(letter) }
+    until @game_over || @round == 8
+      play_round
+    end
   end
 
   private
 
-  # Play rounds until save is requested or game ends
-  def play_game
-  end
-
-
   def user_action
     case user_action_choice
     when '1'
-      guess_letter
+      check_letter(ask_for_letter)
     when '2'
       guess_word
     when '3'
-      @save_game = true
+      save_game
     end
   end
 
-  def guess_letter
-    check_letter(ask_for_letter)
+  def guess_word
+    if correct_word?(ask_for_guess)
+      correct_guess
+      @game_over = true
+    else
+      incorrect_guess
+    end
   end
 
   def select_word
@@ -72,9 +85,20 @@ class Game
     end
     viable_words.sample.chomp
   end
+
+  def save_game
+    save_name = get_save_name
+    @path = "./saves/#{save_name}.txt"
+    File.open(@path, 'w') do |file|
+      JSON.dump(self, file)
+    end
+    @game_over = true
+  end
 end
 
-test = Game.new
+#test = JSON.parse(File.read('./saves/test game.txt'), create_additions: true)
+game = Game.new(round: 2, solution: 'melodies', misses: [], hits: ['s'])
+p game
 #test.check_letter('e')
 #p test.hits
 #p test.misses

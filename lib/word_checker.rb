@@ -7,7 +7,11 @@ module WordChecker
   end
 
   def check_letter(guess)
-    @solution.include?(guess) ? @hits.push(guess) : @misses.push(guess)
+    if @solution.include?(guess)
+      @hits.push(guess) unless @hits.include?(guess)
+    else
+      @misses.push(guess)
+    end
     @solution_split.each_with_index do |letter, index|
       @solution_hidden[index] = letter if letter.upcase == guess.upcase
     end
@@ -17,4 +21,5 @@ module WordChecker
   def correct_word?(guess)
     @solution.downcase == guess.downcase
   end
+  
 end

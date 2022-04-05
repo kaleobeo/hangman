@@ -32,6 +32,18 @@ module Display
     out
   end
 
+  def ask_for_guess
+    puts 'Please enter a word to guess. (It will be between 5 and 12 letters)'
+    out = gets.chomp
+
+    if out.include?(' ')
+      input_error
+      ask_for_guess
+    end
+
+    out
+  end
+
   def ask_for_letter
     puts 'Please input one letter to guess.'
     out = gets.chomp

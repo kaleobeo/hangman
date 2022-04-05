@@ -1,1 +1,0 @@
-{"json_class":"Game","round":0,"solution":"landing","misses":[],"hits":[]}
