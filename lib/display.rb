@@ -4,7 +4,7 @@ module Display
   def get_save_name
     puts 'What would you like to call this game?'
     out = gets.chomp
-    get_save_name if out.include?('/') || out.length > 25
+    out = get_save_name if out.include?('/') || out.length > 25
 
     out
   end
@@ -26,7 +26,7 @@ module Display
     out = gets.chomp
     unless %w[1 2 3].include?(out)
       input_error
-      user_action_choice
+      out = user_action_choice
     end
 
     out
@@ -36,7 +36,7 @@ module Display
     puts 'Please enter \'1\' to load from save, or \'2\' to make a new game.'
     out = gets.chomp.to_i
 
-    prompt_load_save unless out.positive?
+    out = prompt_load_save unless out.positive?
 
     out
   end
@@ -74,10 +74,9 @@ module Display
   def ask_for_guess
     puts 'Please enter a word to guess. (It will be between 5 and 12 letters)'
     out = gets.chomp
-
     if out.include?(' ')
       input_error
-      ask_for_guess
+      out = ask_for_guess
     end
 
     out
@@ -88,7 +87,7 @@ module Display
     out = gets.chomp
     unless ('a'..'z').include?(out)
       input_error
-      ask_for_guess
+      out = ask_for_letter
     end
     out
   end
