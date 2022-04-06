@@ -32,6 +32,45 @@ module Display
     out
   end
 
+  def prompt_load_save
+    puts 'Please enter \'1\' to load from save, or \'2\' to make a new game.'
+    out = gets.chomp.to_i
+
+    prompt_load_save unless out.positive?
+
+    out
+  end
+
+  def select_save
+    puts 'Please enter the number of the game you would like to play.', 'Your saves:'
+    @saves.each_with_index { |save, idx| puts "#{idx + 1}: #{save}" }
+
+    out = gets.chomp.to_i
+    list_saves unless out.positive? && out.to_s.length == 1
+
+    "./saves/#{@saves[out - 1]}"
+  end
+
+  def play_again
+    puts 'Would you like to play again? (y/n)'
+    out = gets.chomp
+    unless %w[y n].include?(out)
+      input_error
+      play_again
+    end
+    return true if out == 'y'
+
+    false
+  end
+
+  def game_lose
+    puts 'Dang, looks like you lost this game.'
+  end
+
+  def game_win
+    puts 'You got the word, amazing!'
+  end
+
   def ask_for_guess
     puts 'Please enter a word to guess. (It will be between 5 and 12 letters)'
     out = gets.chomp

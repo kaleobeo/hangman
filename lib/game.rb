@@ -9,8 +9,7 @@ class Game
   include WordChecker
   include Display
 
-  attr_reader :round, :solution, :misses, :hits, :save_game, :game_over
-  alias save_game? save_game
+  attr_reader :round, :solution, :misses, :hits, :game_over
   alias game_over? game_over
 
   # Ask whether to start new game or load savestate on initialization, then start game
@@ -24,7 +23,7 @@ class Game
   end
 
   def self.json_create(gamestate)
-    new(round: gamestate[:round], solution: gamestate[:solution], misses: gamestate[:misses], hits: gamestate[:hits])
+    new(round: gamestate['round'], solution: gamestate['solution'], misses: gamestate['misses'], hits: gamestate['hits'])
   end
 
   def to_json(*)
@@ -40,11 +39,15 @@ class Game
   # Play out one round of hangman
   def play_round
     @round += 1
-    puts "Round #{@round}: "
+    puts "Round #{@round}, #{@misses.length}/8 "
     display_hidden_word
     puts "Hits: #{@hits.join(' ')}"
     puts "Misses: #{@misses.join(' ')}"
     user_action
+    if @solution_hidden == @solution_split
+      @game_over = true
+      game_win
+    end
   end
 
     # Play rounds until save is requested or game ends
@@ -52,9 +55,10 @@ class Game
     set_solution_variables
     puts @solution
     @hits.each { |letter| check_letter(letter) }
-    until @game_over || @round == 8
+    until @game_over || @misses.length == 8
       play_round
     end
+    puts game_lose if @misses.length >= 8
   end
 
   private
@@ -66,15 +70,18 @@ class Game
     when '2'
       guess_word
     when '3'
+      @round -= 1
       save_game
     end
   end
 
   def guess_word
-    if correct_word?(ask_for_guess)
-      correct_guess
+    guess = ask_for_guess
+    if correct_word?(guess)
+      game_win
       @game_over = true
     else
+      @misses.push(guess)
       incorrect_guess
     end
   end
@@ -97,8 +104,8 @@ class Game
 end
 
 #test = JSON.parse(File.read('./saves/test game.txt'), create_additions: true)
-game = Game.new(round: 2, solution: 'melodies', misses: [], hits: ['s'])
-p game
+# game = Game.new(round: 2, solution: 'melodies', misses: [], hits: ['s'])
+# p game
 #test.check_letter('e')
 #p test.hits
 #p test.misses
