@@ -9,3 +9,5 @@ The program selects a random 5-12 letter word from [this](https://raw.githubuser
 ## Reflection
 
 This was my first time playing with I/O, Files, and JSON in Ruby. I think that due to my focus on this I disregarded some OOP concepts, but overall I am relatively happy with how it came out.
+
+The easiest way to try this game is via replit.com [here](https://replit.com/@kaleobeo/hangman-1#.replit)
