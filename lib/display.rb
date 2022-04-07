@@ -61,6 +61,7 @@ module Display
     end
     return true if out == 'y'
 
+    puts 'Thanks for playing!'
     false
   end
 

@@ -20,7 +20,6 @@ class Hangman
       Game.new
     end
     start_game if play_again
-    puts 'Thanks for playing!'
   end
 
   def load_save

@@ -54,10 +54,12 @@ class Game
   # Play rounds until save is requested or game ends
   def play_game
     set_solution_variables
-    puts @solution
     @hits.each { |letter| check_letter(letter) }
     play_round until @game_over || @misses.length == 8
-    puts game_lose if @misses.length >= 8
+    if @misses.length >= 8
+      puts game_lose 
+      puts "The hidden word was #{@solution}"
+    end
   end
 
   private
