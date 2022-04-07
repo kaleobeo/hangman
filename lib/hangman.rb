@@ -1,11 +1,15 @@
+# frozen_string_literal: true
+
 require_relative 'display'
 require_relative 'game'
 require 'json'
 
+# Manages loading saves and creating games
 class Hangman
   include Display
   def initialize
     puts 'Welcome to hangman!'
+    start_game
   end
 
   def start_game
@@ -17,7 +21,6 @@ class Hangman
     end
     start_game if play_again
     puts 'Thanks for playing!'
-
   end
 
   def load_save
@@ -26,5 +29,4 @@ class Hangman
   end
 end
 
-test = Hangman.new
-test.start_game
+Hangman.new

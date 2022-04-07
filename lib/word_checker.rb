@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Handles comparison between words and guesses
 module WordChecker
   def set_solution_variables
     @solution_split = @solution.split('')
@@ -21,5 +22,4 @@ module WordChecker
   def correct_word?(guess)
     @solution.downcase == guess.downcase
   end
-  
 end

@@ -23,7 +23,8 @@ class Game
   end
 
   def self.json_create(gamestate)
-    new(round: gamestate['round'], solution: gamestate['solution'], misses: gamestate['misses'], hits: gamestate['hits'])
+    new(round: gamestate['round'], solution: gamestate['solution'], misses: gamestate['misses'],
+        hits: gamestate['hits'])
   end
 
   def to_json(*)
@@ -33,7 +34,7 @@ class Game
       :solution => @solution,
       :misses => @misses,
       :hits => @hits
-    })
+              })
   end
 
   # Play out one round of hangman
@@ -50,14 +51,12 @@ class Game
     end
   end
 
-    # Play rounds until save is requested or game ends
+  # Play rounds until save is requested or game ends
   def play_game
     set_solution_variables
     puts @solution
     @hits.each { |letter| check_letter(letter) }
-    until @game_over || @misses.length == 8
-      play_round
-    end
+    play_round until @game_over || @misses.length == 8
     puts game_lose if @misses.length >= 8
   end
 
@@ -102,14 +101,3 @@ class Game
     @game_over = true
   end
 end
-
-#test = JSON.parse(File.read('./saves/test game.txt'), create_additions: true)
-# game = Game.new(round: 2, solution: 'melodies', misses: [], hits: ['s'])
-# p game
-#test.check_letter('e')
-#p test.hits
-#p test.misses
-
-
-# Code to load a game object from save file
-# test2 = JSON.parse(File.read('./saves/FILENAME'))

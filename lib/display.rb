@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Manages interface with player
 module Display
   def get_save_name
     puts 'What would you like to call this game?'
